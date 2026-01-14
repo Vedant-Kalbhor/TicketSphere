@@ -1,0 +1,29 @@
+event-booking-platform/
+│
+├── frontend/
+│   └── react-app/
+│
+├── backend/
+│   ├── app.py
+│   ├── db.py
+│   ├── models.py
+│   ├── routes/
+│   │   ├── events.py
+│   │   └── booking.py
+│   ├── requirements.txt
+│   └── config.py
+│
+├── lambda/
+│   ├── booking_processor.py
+│   └── notification.py
+│
+├── terraform/
+│   ├── vpc.tf
+│   ├── ec2.tf
+│   ├── rds.tf
+│   ├── sqs.tf
+│   ├── lambda.tf
+│   └── iam.tf
+│
+└── sql/
+    └── schema.sql
