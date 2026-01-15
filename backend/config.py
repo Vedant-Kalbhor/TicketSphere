@@ -1,6 +1,0 @@
-DB_HOST = "event-booking-db.cqjac8444q7n.us-east-1.rds.amazonaws.com"
-DB_NAME = "eventsdb"
-DB_USER = "postgres"
-DB_PASSWORD = "StrongPassword123"
-AWS_REGION = "us-east-1a"
-SQS_QUEUE_URL = "https://sqs.us-east-1.amazonaws.com/152322628867/booking-queue"
