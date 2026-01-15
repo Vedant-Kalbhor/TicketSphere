@@ -1,0 +1,76 @@
+####################################
+# 🔐 AWS & Security
+####################################
+*.pem
+*.key
+*.ppk
+
+# AWS credentials
+.aws/
+aws-credentials.json
+.env
+.env.*
+secrets.*
+credentials.*
+config.*.json
+
+####################################
+# 🧱 Terraform
+####################################
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+terraform.tfvars
+terraform.tfvars.json
+
+# Lambda build artifacts
+*.zip
+
+####################################
+# 🐍 Python
+####################################
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.env/
+pip-wheel-metadata/
+
+####################################
+# ⚛️ React / Frontend
+####################################
+node_modules/
+build/
+dist/
+.cache/
+.next/
+
+####################################
+# 🖥️ OS / Editor Junk
+####################################
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
+*.swp
+*.swo
+
+####################################
+# 📄 Misc
+####################################
+coverage/
+*.tmp
+*.bak
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+*.zip
