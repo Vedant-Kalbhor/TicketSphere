@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TicketSphere — Event Booking Platform</title>
+    <meta name="description" content="TicketSphere is a cloud-native event booking platform. Browse concerts, conferences, and workshops — book your seats instantly." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <span class="logo-icon">🎟️</span>
+                <span class="logo-text">TicketSphere</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#events">Events</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ===== HERO ===== -->
+    <header class="hero" id="hero">
+        <div class="hero-glow hero-glow--1"></div>
+        <div class="hero-glow hero-glow--2"></div>
+        <div class="hero-content">
+            <p class="hero-badge">☁️ Powered by AWS</p>
+            <h1 class="hero-title">
+                Book Your Next <br />
+                <span class="gradient-text">Unforgettable Experience</span>
+            </h1>
+            <p class="hero-subtitle">
+                Browse concerts, conferences &amp; workshops — grab your seats before they're gone.
+                Lightning-fast async booking powered by SQS &amp; Lambda.
+            </p>
+            <a href="#events" class="btn btn-primary hero-cta">
+                Explore Events
+                <span class="btn-arrow">→</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- ===== EVENTS SECTION ===== -->
+    <section class="section" id="events">
+        <div class="container">
+            <h2 class="section-title">Upcoming Events</h2>
+            <p class="section-subtitle">Find something you love and reserve your seat in seconds.</p>
+
+            <!-- Loading Skeleton -->
+            <div class="events-grid" id="events-grid">
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+            </div>
+
+            <!-- Empty State (hidden by default) -->
+            <div class="empty-state" id="empty-state" style="display:none;">
+                <span class="empty-icon">📭</span>
+                <p>No events available right now. Check back soon!</p>
+            </div>
+
+            <!-- Error State (hidden by default) -->
+            <div class="error-state" id="error-state" style="display:none;">
+                <span class="error-icon">⚠️</span>
+                <p id="error-message">Could not load events. Make sure the backend is running.</p>
+                <button class="btn btn-secondary" onclick="fetchEvents()">Retry</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== HOW IT WORKS ===== -->
+    <section class="section section--alt" id="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">A cloud-native booking flow — fast, reliable, and scalable.</p>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Browse Events</h3>
+                    <p>Our Flask API on EC2 serves the latest events from a PostgreSQL database on RDS.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Book a Seat</h3>
+                    <p>Your booking request is sent to an SQS queue for reliable async processing.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Instant Confirmation</h3>
+                    <p>A Lambda function processes the queue, locks your seat, and confirms the booking.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="container footer-inner">
+            <p>&copy; 2026 TicketSphere &middot; Built by <strong>Vedant Kalbhor</strong></p>
+            <p class="footer-tech">Flask · AWS EC2 · SQS · Lambda · RDS · Terraform</p>
+        </div>
+    </footer>
+
+    <!-- ===== BOOKING MODAL ===== -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal" id="booking-modal">
+            <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
+            <h2 class="modal-title">Book Your Seat</h2>
+            <p class="modal-event-name" id="modal-event-name"></p>
+
+            <form id="booking-form" autocomplete="off">
+                <input type="hidden" id="booking-event-id" />
+
+                <div class="form-group">
+                    <label for="user-id">User ID</label>
+                    <input type="number" id="user-id" placeholder="e.g. 1" required min="1" />
+                </div>
+
+                <div class="form-group">
+                    <label for="seat-id">Seat ID</label>
+                    <input type="number" id="seat-id" placeholder="e.g. 5" required min="1" />
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block" id="booking-submit">
+                    <span id="btn-text">Confirm Booking</span>
+                    <span id="btn-loader" class="spinner" style="display:none;"></span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== TOAST CONTAINER ===== -->
+    <div id="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
