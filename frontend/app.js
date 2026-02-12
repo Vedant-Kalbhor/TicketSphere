@@ -6,8 +6,9 @@
 // ── Config ───────────────────────────────────────────────────
 // Change this to your EC2 public IP or domain when deploying.
 // For local development keep it as http://localhost:5000
-const API_BASE_URL = "http://localhost:5000";
+//const API_BASE_URL = "http://localhost:5000";
 //const API_BASE_URL = "http://<EC2_PUBLIC_IP>:5000";
+const API_BASE_URL = "http://35.153.60.68:5000";
 
 
 // ── DOM References ───────────────────────────────────────────
