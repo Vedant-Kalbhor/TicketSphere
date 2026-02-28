@@ -4,6 +4,10 @@ A **BookMyShow-like cloud-native event booking system** built on AWS to demonstr
 
 ---
 
+### 📖 [**GETTING STARTED GUIDE**](./GETTING_STARTED.md) — Follow this to run the project.
+
+---
+
 ## 🚀 Features
 
 - Browse events (concerts, conferences, workshops)

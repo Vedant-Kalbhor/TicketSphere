@@ -8,7 +8,7 @@
 // For local development keep it as http://localhost:5000
 //const API_BASE_URL = "http://localhost:5000";
 //const API_BASE_URL = "http://<EC2_PUBLIC_IP>:5000";
-const API_BASE_URL = "http://35.153.60.68:5000";
+const API_BASE_URL = "http://100.48.205.199";
 
 
 // ── DOM References ───────────────────────────────────────────
