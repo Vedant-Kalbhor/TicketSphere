@@ -124,18 +124,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Select a Seat</label>
-                    <div id="seat-map" class="seat-map">
-                        <!-- Seats will be loaded here -->
-                        <p class="loading-text">Loading seats...</p>
-                    </div>
+                    <label for="seat-ids">Enter Seat IDs (comma separated)</label>
+                    <input type="text" id="seat-ids" placeholder="e.g. 1, 2, 3" required />
+                    <small style="color:var(--text-muted); display:block; margin-top:5px;">
+                        Enter numeric IDs of the seats you want to book.
+                    </small>
                 </div>
 
-                <input type="hidden" id="seat-id" />
-                
-                <p id="selection-summary" class="selection-summary">No seat selected</p>
-
-                <button type="submit" class="btn btn-primary btn-block" id="booking-submit" disabled>
+                <button type="submit" class="btn btn-primary btn-block" id="booking-submit">
                     <span id="btn-text">Confirm Booking</span>
                     <span id="btn-loader" class="spinner" style="display:none;"></span>
                 </button>

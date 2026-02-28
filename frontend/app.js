@@ -20,10 +20,8 @@ const modalClose     = document.getElementById("modal-close");
 const modalEventName = document.getElementById("modal-event-name");
 const bookingForm    = document.getElementById("booking-form");
 const bookingEventId = document.getElementById("booking-event-id");
-const seatIdInput    = document.getElementById("seat-id");
+const seatIdsInput   = document.getElementById("seat-ids");
 const userIdInput    = document.getElementById("user-id");
-const seatMap        = document.getElementById("seat-map");
-const summary        = document.getElementById("selection-summary");
 const btnText        = document.getElementById("btn-text");
 const btnLoader      = document.getElementById("btn-loader");
 const submitBtn      = document.getElementById("booking-submit");
@@ -142,10 +140,15 @@ bookingForm.addEventListener("submit", async (e) => {
 
     const eventId = parseInt(bookingEventId.value);
     const userId  = parseInt(userIdInput.value);
-    const seatId  = parseInt(seatIdInput.value);
+    
+    // Parse comma separated IDs
+    const seatIds = seatIdsInput.value
+        .split(",")
+        .map(id => parseInt(id.trim()))
+        .filter(id => !isNaN(id));
 
-    if (!userId || !seatId) {
-        showToast("Please fill in all fields.", "error");
+    if (!userId || seatIds.length === 0) {
+        showToast("Please enter a valid User ID and at least one Seat ID.", "error");
         return;
     }
 
@@ -161,7 +164,7 @@ bookingForm.addEventListener("submit", async (e) => {
             body: JSON.stringify({
                 user_id: userId,
                 event_id: eventId,
-                seat_id: seatId,
+                seat_ids: seatIds, // Send list
             }),
         });
 
@@ -169,7 +172,7 @@ bookingForm.addEventListener("submit", async (e) => {
 
         if (res.ok) {
             closeModal();
-            showToast(`🎉 Booking confirmed! ID: ${data.booking_id}`, "success");
+            showToast(`🎉 ${seatIds.length} seat(s) requested! Check DB for status.`, "success");
         } else {
             showToast(data.message || "Booking failed. Try again.", "error");
         }
