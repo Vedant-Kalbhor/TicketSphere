@@ -103,37 +103,61 @@ The frontend is a lightweight vanilla app that runs in your browser.
 
 ---
 
-## 🛠️ Useful PSQL Commands
+## 🏗️ Step 6: Data Seeding (Populate your App)
+If your app is running but shows "Loading seats..." or "No events", run these commands in `psql` to populate your database:
 
-Connect and run these to manage your data:
-
-### Create New User
+### 1. Add a Default User
 ```sql
-INSERT INTO users (name, email) VALUES ('Vedant', 'vedant@gmail.com');
+INSERT INTO users (name, email) VALUES ('User One', 'user1@example.com');
 ```
 
-### Create New Event
+### 2. Add an Event (if not present)
 ```sql
 INSERT INTO events (title, venue, event_date, total_seats) 
-VALUES ('Taylor Swift - Eras Tour', 'Wankhede Stadium, Mumbai', '2026-05-15 19:00:00', 50);
+VALUES ('Global Tech Summit', 'Convention Center, San Jose', '2026-10-10 09:00:00', 20);
 ```
 
-### Add Seats to an Event (ID 3 for example)
+### 3. Generate 20 Seats for Event ID 1
 ```sql
-INSERT INTO seats (event_id, seat_number, status) VALUES 
-(3, 'A1', 'AVAILABLE'), (3, 'A2', 'AVAILABLE'), (3, 'B1', 'AVAILABLE');
+-- This creates 20 seats (A1 to A20) for event 1
+INSERT INTO seats (event_id, seat_number, status)
+SELECT 1, 'A' || i, 'AVAILABLE' FROM generate_series(1, 20) AS i;
 ```
 
-### Show All Bookings
+### 4. Verify everything
 ```sql
-SELECT b.id, u.name, e.title, s.seat_number, b.status 
+SELECT * FROM events;
+SELECT * FROM seats LIMIT 5;
+SELECT * FROM users;
+```
+
+---
+
+## 🛠️ Maintenance: Updating Lambda (Local Windows)
+Whenever you change `lambda/booking_processor.py`, run this in your **local PowerShell**:
+
+```powershell
+Compress-Archive -Path .\lambda\booking_processor.py -DestinationPath .\terraform\booking_processor.zip -Update
+cd terraform
+terraform apply
+```
+
+---
+
+## 🧪 Common PSQL Queries (Reporting)
+
+### Show All Bookings (Joined)
+```sql
+SELECT b.id, u.name as user, e.title as event, s.seat_number, b.status 
 FROM bookings b
 JOIN users u ON b.user_id = u.id
 JOIN events e ON b.event_id = e.id
 JOIN seats s ON b.seat_id = s.id;
 ```
 
-### Reset All Seats for an Event
+### Check Available Seat Count
 ```sql
-UPDATE seats SET status = 'AVAILABLE' WHERE event_id = 3;
+SELECT event_id, status, count(*) 
+FROM seats 
+GROUP BY event_id, status;
 ```
