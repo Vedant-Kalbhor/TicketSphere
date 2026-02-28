@@ -29,17 +29,28 @@ First, we need to create the AWS resources (SQS, Lambda, IAM Roles, etc.).
 ---
 
 ## 🗄️ Step 2: Database Setup (RDS)
-Once the RDS instance is running, you need to initialize the tables.
+Once the RDS instance is running, you need to initialize the tables from your EC2 instance.
 
-1. Connect to your RDS instance:
+1. **Download the AWS Global Bundle Certificate** (required for SSL):
    ```bash
-   psql -h <RDS_ENDPOINT> -U postgres -d eventsdb
+   sudo mkdir -p /certs
+   sudo wget https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem -O /certs/global-bundle.pem
    ```
-2. Run the schema script:
+
+2. **Set the RDS Host and Connect**:
+   ```bash
+   export RDSHOST="event-booking-db.cqjac8444q7n.us-east-1.rds.amazonaws.com"
+
+   psql "host=$RDSHOST port=5432 dbname=eventsdb user=postgres sslmode=verify-full sslrootcert=/certs/global-bundle.pem"
+   ```
+   *(Enter your password when prompted: `StrongPassword123`)*
+
+3. **Run the schema script**:
+   Once inside the `psql` shell:
    ```sql
    \i ../sql/schema.sql
    ```
-   *(Alternatively, copy-paste the contents of `sql/schema.sql` into your database tool.)*
+   *(Alternatively, copy-paste the contents of `sql/schema.sql` into the terminal.)*
 
 ---
 
@@ -87,6 +98,42 @@ The frontend is a lightweight vanilla app that runs in your browser.
 ---
 
 ## 🛑 Common Troubleshooting
-- **Connection Timeout**: Ensure your EC2 Security Group allows inbound traffic on port `5000` and `22`.
-- **RDS Access**: Ensure the RDS Security Group allows inbound traffic from your EC2 instance's IP on port `5432`.
+...
 - **CORS Error**: Ensure `flask-cors` is installed and initialized in `app.py`.
+
+---
+
+## 🛠️ Useful PSQL Commands
+
+Connect and run these to manage your data:
+
+### Create New User
+```sql
+INSERT INTO users (name, email) VALUES ('Vedant', 'vedant@gmail.com');
+```
+
+### Create New Event
+```sql
+INSERT INTO events (title, venue, event_date, total_seats) 
+VALUES ('Taylor Swift - Eras Tour', 'Wankhede Stadium, Mumbai', '2026-05-15 19:00:00', 50);
+```
+
+### Add Seats to an Event (ID 3 for example)
+```sql
+INSERT INTO seats (event_id, seat_number, status) VALUES 
+(3, 'A1', 'AVAILABLE'), (3, 'A2', 'AVAILABLE'), (3, 'B1', 'AVAILABLE');
+```
+
+### Show All Bookings
+```sql
+SELECT b.id, u.name, e.title, s.seat_number, b.status 
+FROM bookings b
+JOIN users u ON b.user_id = u.id
+JOIN events e ON b.event_id = e.id
+JOIN seats s ON b.seat_id = s.id;
+```
+
+### Reset All Seats for an Event
+```sql
+UPDATE seats SET status = 'AVAILABLE' WHERE event_id = 3;
+```

@@ -4,7 +4,8 @@ from backend.config import *
 
 def lambda_handler(event, context):
     for record in event["Records"]:
-        body = eval(record["body"])
+        body = record["body"].replace("'", '"') # Basic fix for single quotes in JSON string
+        data = json.loads(body)
 
         conn = psycopg2.connect(
             host=DB_HOST,
@@ -19,23 +20,23 @@ def lambda_handler(event, context):
 
             cur.execute(
                 "SELECT status FROM seats WHERE id=%s FOR UPDATE",
-                (body["seat_id"],)
+                (data["seat_id"],)
             )
             status = cur.fetchone()[0]
 
             if status == "AVAILABLE":
                 cur.execute(
                     "UPDATE seats SET status='BOOKED' WHERE id=%s",
-                    (body["seat_id"],)
+                    (data["seat_id"],)
                 )
 
                 cur.execute(
-                    "INSERT INTO bookings VALUES (%s,%s,%s,%s,'CONFIRMED',NOW())",
+                    "INSERT INTO bookings (id, user_id, event_id, seat_id, status, created_at) VALUES (%s,%s,%s,%s,'CONFIRMED',NOW())",
                     (
-                        body["booking_id"],
-                        body["user_id"],
-                        body["event_id"],
-                        body["seat_id"]
+                        data["booking_id"],
+                        data["user_id"],
+                        data["event_id"],
+                        data["seat_id"]
                     )
                 )
                 conn.commit()

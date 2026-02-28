@@ -119,16 +119,23 @@
                 <input type="hidden" id="booking-event-id" />
 
                 <div class="form-group">
-                    <label for="user-id">User ID</label>
-                    <input type="number" id="user-id" placeholder="e.g. 1" required min="1" />
+                    <label for="user-id">Enter User ID</label>
+                    <input type="number" id="user-id" placeholder="e.g. 1" required min="1" value="1" />
                 </div>
 
                 <div class="form-group">
-                    <label for="seat-id">Seat ID</label>
-                    <input type="number" id="seat-id" placeholder="e.g. 5" required min="1" />
+                    <label>Select a Seat</label>
+                    <div id="seat-map" class="seat-map">
+                        <!-- Seats will be loaded here -->
+                        <p class="loading-text">Loading seats...</p>
+                    </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-block" id="booking-submit">
+                <input type="hidden" id="seat-id" />
+                
+                <p id="selection-summary" class="selection-summary">No seat selected</p>
+
+                <button type="submit" class="btn btn-primary btn-block" id="booking-submit" disabled>
                     <span id="btn-text">Confirm Booking</span>
                     <span id="btn-loader" class="spinner" style="display:none;"></span>
                 </button>
